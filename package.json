@@ -13,7 +13,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/808alex/Trading-Journal.git"
+    "url": "git+https://github.com/808alex/Trenching-Journal.git"
   },
   "keywords": [
     "trenching-journal",
@@ -26,9 +26,9 @@
   "license": "MIT",
   "type": "commonjs",
   "bugs": {
-    "url": "https://github.com/808alex/Trading-Journal/issues"
+    "url": "https://github.com/808alex/Trenching-Journal/issues"
   },
-  "homepage": "https://github.com/808alex/Trading-Journal#readme",
+  "homepage": "https://github.com/808alex/Trenching-Journal#readme",
   "dependencies": {
     "express": "^5.2.1"
   },

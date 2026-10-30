@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trenching Journal: a free trading journal for memecoin traders</title>
+<meta name="description" content="A free, open-source trading journal for Solana memecoin traders. Log trades, track P&L, journal your day and see your patterns. Runs on your own computer.">
+<link rel="icon" type="image/svg+xml" href="assets/tj-icon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Trenching Journal">
+<meta property="og:description" content="A free, open-source trading journal for Solana memecoin traders. Runs on your own computer.">
+<meta property="og:image" content="https://808alex.github.io/Trenching-Journal/assets/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<style>
+  :root {
+    --bg: #0b0a13; --panel: #16131f; --panel-alt: #1c1830; --border: #2b2440;
+    --text: #f1eef9; --text-dim: #9993b3; --accent: #8b5cf6; --accent-2: #22d3ee;
+    --green: #2fe6a4; --yellow: #ffcc4d;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text); line-height: 1.6; }
+  body::before {
+    content: ''; position: fixed; inset: 0; z-index: -1;
+    background:
+      radial-gradient(600px circle at 12% 0%, rgba(139, 92, 246, 0.16), transparent 55%),
+      radial-gradient(500px circle at 90% 15%, rgba(34, 211, 238, 0.10), transparent 55%),
+      radial-gradient(700px circle at 50% 100%, rgba(139, 92, 246, 0.08), transparent 60%),
+      var(--bg);
+  }
+  a { color: var(--accent-2); }
+  .wrap { max-width: 1040px; margin: 0 auto; padding: 0 1.5rem; }
+
+  nav { display: flex; align-items: center; gap: 0.75rem; padding: 1.25rem 0; }
+  nav img { width: 34px; height: 34px; }
+  nav .name { font-weight: 700; }
+  nav .spacer { flex: 1; }
+  nav a.gh { color: var(--text-dim); text-decoration: none; font-size: 0.9rem; border: 1px solid var(--border); padding: 0.45rem 0.9rem; border-radius: 8px; }
+  nav a.gh:hover { color: var(--text); border-color: var(--accent); }
+
+  .grad {
+    background: linear-gradient(90deg, var(--text) 30%, var(--accent-2));
+    -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+  }
+
+  .hero { text-align: center; padding: 3.5rem 0 2.5rem; }
+  .hero h1 { font-size: clamp(2.2rem, 6vw, 3.6rem); line-height: 1.1; margin: 0 0 1rem; }
+  .hero p.lead { font-size: 1.15rem; color: var(--text-dim); max-width: 640px; margin: 0 auto 2rem; }
+  .actions { display: flex; flex-wrap: wrap; gap: 0.75rem; justify-content: center; }
+  .btn { display: inline-block; padding: 0.8rem 1.4rem; border-radius: 8px; font-weight: 600; text-decoration: none; }
+  .btn-primary { background: linear-gradient(135deg, var(--accent), var(--accent-2)); color: #fff; }
+  .btn-secondary { border: 1px solid var(--border); color: var(--text); }
+  .btn-secondary:hover { border-color: var(--accent); }
+  .meta { margin-top: 1.1rem; font-size: 0.85rem; color: var(--text-dim); }
+
+  .shot { display: block; width: 100%; height: auto; border-radius: 12px; border: 1px solid var(--border); box-shadow: 0 30px 80px -30px rgba(139, 92, 246, 0.45); }
+  .hero-shot {
+    max-width: 760px; max-height: 640px; margin: 2.5rem auto 0;
+    object-fit: cover; object-position: top;
+    -webkit-mask-image: linear-gradient(to bottom, #000 78%, transparent);
+    mask-image: linear-gradient(to bottom, #000 78%, transparent);
+  }
+
+  section { padding: 3.5rem 0; }
+  section h2 { font-size: 1.7rem; margin: 0 0 0.5rem; text-align: center; }
+  section p.sub { color: var(--text-dim); text-align: center; margin: 0 auto 2.25rem; max-width: 620px; }
+
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr)); gap: 1rem; }
+  .card { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 1.4rem; }
+  .card h3 { margin: 0 0 0.4rem; font-size: 1.05rem; }
+  .card p { margin: 0; color: var(--text-dim); font-size: 0.95rem; }
+
+  .pair { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr)); gap: 1.5rem; align-items: start; }
+  .pair figure { margin: 0; }
+  .pair figcaption { color: var(--text-dim); font-size: 0.9rem; margin-top: 0.7rem; text-align: center; }
+
+  ol.steps { counter-reset: s; list-style: none; padding: 0; margin: 0 auto; max-width: 680px; display: flex; flex-direction: column; gap: 0.9rem; }
+  ol.steps li { counter-increment: s; background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 1.1rem 1.25rem 1.1rem 3.6rem; position: relative; }
+  ol.steps li::before { content: counter(s); position: absolute; left: 1.1rem; top: 1.05rem; width: 1.7rem; height: 1.7rem; border-radius: 50%; background: linear-gradient(135deg, var(--accent), var(--accent-2)); color: #fff; font-weight: 700; font-size: 0.9rem; display: flex; align-items: center; justify-content: center; }
+  code { background: var(--panel-alt); border: 1px solid var(--border); border-radius: 5px; padding: 0.1rem 0.4rem; font-size: 0.9em; }
+
+  .safety { max-width: 760px; margin: 0 auto; background: rgba(255, 204, 77, 0.06); border: 1px solid rgba(255, 204, 77, 0.45); border-radius: 12px; padding: 1.5rem 1.6rem; }
+  .safety h2 { text-align: left; font-size: 1.3rem; color: var(--yellow); }
+  .safety ul { margin: 0.5rem 0 0; padding-left: 1.2rem; }
+  .safety li { margin-bottom: 0.45rem; }
+
+  footer { border-top: 1px solid var(--border); padding: 2rem 0 3rem; color: var(--text-dim); font-size: 0.9rem; text-align: center; }
+
+  @media (max-width: 520px) {
+    .hero { padding-top: 2rem; }
+    section { padding: 2.5rem 0; }
+    ol.steps li { padding-left: 3.2rem; }
+  }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <nav>
+      <img src="assets/tj-icon.svg" alt="">
+      <span class="name">Trenching Journal</span>
+      <span class="spacer"></span>
+      <a class="gh" href="https://github.com/808alex/Trenching-Journal">GitHub</a>
+    </nav>
+
+    <header class="hero">
+      <h1><span class="grad">Trenching Journal</span></h1>
+      <p class="lead">A free, open-source trading journal for Solana memecoin traders. Log every trade, see your real P&amp;L, and find out what keeps costing you money. It all runs on your own computer.</p>
+      <div class="actions">
+        <a class="btn btn-primary" href="https://github.com/808alex/Trenching-Journal/releases/latest">Download the latest release</a>
+        <a class="btn btn-secondary" href="https://github.com/808alex/Trenching-Journal">View the source</a>
+      </div>
+      <p class="meta">Free · MIT licence · Windows, macOS and Linux · needs Node.js 22.13+</p>
+      <img class="shot hero-shot" src="screenshots/today.png" alt="The Today screen: focus for today, today's trades so far, and open positions" width="1350" height="1757">
+    </header>
+  </div>
+
+  <section>
+    <div class="wrap">
+      <h2>Built for the trenches</h2>
+      <p class="sub">Most traders don't lose on one bad coin. They lose to the same habits over and over. This journal shows you which ones.</p>
+      <div class="grid">
+        <div class="card"><h3>Fast trade logging</h3><p>Paste the contract address and the coin fills in from DexScreener. Risk % is worked out from your portfolio size.</p></div>
+        <div class="card"><h3>Real P&amp;L</h3><p>Totals and a calendar view in SOL or USD, GBP, EUR or JPY, with fees included.</p></div>
+        <div class="card"><h3>A journal that fills itself in</h3><p>Every day gets a summary of its trades: P&amp;L, wins and losses, mood, plan and best and worst trade.</p></div>
+        <div class="card"><h3>Focus for today</h3><p>Flags your patterns from the last few days, like FOMO entries, broken rules, low sleep or skipped journaling.</p></div>
+        <div class="card"><h3>Grade your process</h3><p>Rate each trade A to D on discipline, not luck, and see how your grades line up with results.</p></div>
+        <div class="card"><h3>Private by design</h3><p>No account, no cloud, no tracking. Your data is one file on your machine, with export and import for backups.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <h2>Look inside</h2>
+      <p class="sub">Screenshots use invented demo data.</p>
+      <div class="pair">
+        <figure>
+          <img class="shot" src="screenshots/journal-summary.png" alt="The journal's automatic summary of a trading day" width="1350" height="870">
+          <figcaption>The day's summary, filled in from your trades</figcaption>
+        </figure>
+        <figure>
+          <img class="shot" src="screenshots/log-trade.png" alt="The Log a Trade form" width="1350" height="1448">
+          <figcaption>Logging a trade, with risk worked out for you</figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <h2>Get started</h2>
+      <p class="sub">Takes about two minutes.</p>
+      <ol class="steps">
+        <li>Install <a href="https://nodejs.org">Node.js</a> 22.13 or newer (the current LTS is fine).</li>
+        <li>Download the zip from the <a href="https://github.com/808alex/Trenching-Journal/releases/latest">latest release</a> and extract it.</li>
+        <li><strong>Windows:</strong> double-click <code>Trenching Journal.bat</code>. <strong>Mac/Linux:</strong> run <code>./start.sh</code>. It opens in your browser.</li>
+      </ol>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="safety">
+        <h2>Stay safe</h2>
+        <ul>
+          <li>Only download it from <a href="https://github.com/808alex/Trenching-Journal">github.com/808alex/Trenching-Journal</a> or this page. Copies posted anywhere else may have been changed.</li>
+          <li>The app never asks for your seed phrase, private key or a wallet connection, and it can't move funds. Anything claiming to be it that asks for those is a scam.</li>
+          <li>It only runs on your own computer. Other devices on your network and other websites can't reach it.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="wrap">
+      Made by <a href="https://github.com/808alex">808alex</a> · Open source under the MIT licence · Not financial advice
+    </div>
+  </footer>
+</body>
+</html>
