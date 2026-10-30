@@ -10,10 +10,12 @@ const backupRouter = require('./routes/backup');
 const walletsRouter = require('./routes/wallets');
 const dailyRouter = require('./routes/daily');
 const todayRouter = require('./routes/today');
+const { localOnly } = require('./security');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+app.use(localOnly(PORT));
 // Raised from the default 100kb -- trade screenshots come in as base64 data
 // URLs in the JSON body, and the higher-fidelity resize (1600px, quality
 // 0.92) can run a few MB for a dense chart screenshot.
@@ -31,6 +33,7 @@ app.use('/api/today', todayRouter);
 app.use('/shared', express.static(path.join(__dirname, '..', 'shared')));
 app.use(express.static(path.join(__dirname, '..', 'public')));
 
-app.listen(PORT, () => {
+// Loopback only: other devices on the network can't reach the journal.
+app.listen(PORT, '127.0.0.1', () => {
   console.log(`Trenching Journal running at http://localhost:${PORT}`);
 });
