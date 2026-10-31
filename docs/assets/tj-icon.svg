@@ -6,6 +6,6 @@
       <stop offset="100%" stop-color="#22d3ee"/>
     </linearGradient>
   </defs>
-  <rect x="0" y="0" width="200" height="200" rx="42" fill="#16131f" stroke="#2b2440" stroke-width="1.5"/>
+  <rect x="0" y="0" width="200" height="200" fill="#16131f"/>
   <text x="100" y="128" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif" font-weight="800" font-size="92" fill="url(#headerGrad)">TJ</text>
 </svg>
