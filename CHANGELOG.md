@@ -2,6 +2,14 @@
 
 All notable changes to Trenching Journal are documented here.
 
+## 1.2.1
+
+Fixed
+- Security: the app now only accepts connections from your own computer. Before, anyone on the same Wi-Fi could open your journal, and a website open in your browser could wipe all your data while the app was running.
+
+Also
+- A landing page: https://808alex.github.io/Trenching-Journal
+
 ## 1.2.0
 
 New
