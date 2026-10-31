@@ -1,6 +1,6 @@
 # 📓 Trenching Journal!
 
-[![CI](https://github.com/808alex/Trading-Journal/actions/workflows/ci.yml/badge.svg)](https://github.com/808alex/Trading-Journal/actions/workflows/ci.yml)
+[![CI](https://github.com/808alex/Trenching-Journal/actions/workflows/ci.yml/badge.svg)](https://github.com/808alex/Trenching-Journal/actions/workflows/ci.yml)
 
 A personal, local, single-user paper-trading journal for memecoin/crypto trades on Solana. Log a trade, close it out, reflect on what you were thinking, and see your own patterns over time — all of it stored on your own computer.
 
@@ -51,7 +51,7 @@ A personal, local, single-user paper-trading journal for memecoin/crypto trades 
 
 ## 🚀 Getting started
 
-1. Download this repository — either `git clone https://github.com/808alex/Trading-Journal.git`, or use GitHub's green **Code → Download ZIP** button above and extract it, or grab a packaged zip from the [Releases](https://github.com/808alex/Trading-Journal/releases) page if one is published.
+1. Download this repository — either `git clone https://github.com/808alex/Trenching-Journal.git`, or use GitHub's green **Code → Download ZIP** button above and extract it, or grab a packaged zip from the [Releases](https://github.com/808alex/Trenching-Journal/releases) page if one is published.
 2. **Windows:** double-click `Trenching Journal.bat`. It installs dependencies on first run and opens the app in your browser automatically.
    **Mac/Linux:** run `./start.sh` from a terminal in the project folder (first time only: `chmod +x start.sh`).
 3. Prefer doing it by hand? `npm install` once, then `npm start`, then open [http://localhost:3000](http://localhost:3000).
